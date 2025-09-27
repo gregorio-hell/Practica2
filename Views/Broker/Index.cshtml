@@ -19,7 +19,7 @@
             <th>@Html.DisplayNameFor(model => model.Titulo)</th>
             <th>@Html.DisplayNameFor(model => model.Precio)</th>
             <th>@Html.DisplayNameFor(model => model.Ciudad)</th>
-            <th>@Html.DisplayNameFor(model => model.Estado)</th>
+            <th>@Html.DisplayNameFor(model => model.Activo)</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -45,8 +45,8 @@
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Editar</a>
                     <form asp-action="ToggleStatus" asp-route-id="@item.Id" method="post" style="display: inline;">
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-sm @(item.Estado ? "btn-danger" : "btn-success")">
-                            @(item.Estado ? "Desactivar" : "Activar")
+                        <button type="submit" class="btn btn-sm @(item.Activo ? "btn-danger" : "btn-success")">
+                            @(item.Activo ? "Desactivar" : "Activar")
                         </button>
                     </form>
                 </div>

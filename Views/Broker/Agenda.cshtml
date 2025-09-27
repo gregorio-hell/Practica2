@@ -42,7 +42,7 @@
             </td>
             <td>@item.Notas</td>
             <td>
-                @if (item.Estado == "Pendiente") {
+                @if (item.Estado == EstadoVisita.Solicitada) {
                     <div class="btn-group" role="group">
                         <form asp-action="ConfirmarVisita" asp-route-id="@item.Id" method="post" style="display: inline;">
                             @Html.AntiForgeryToken()
