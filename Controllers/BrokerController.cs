@@ -189,10 +189,23 @@ namespace pc2.Controllers
             }
 
             var inmueble = await _context.Inmuebles
+                .Include(i => i.Reservas)
+                .Include(i => i.Visitas)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (inmueble == null)
             {
                 return NotFound();
+            }
+
+            // Para debugging
+            if (inmueble != null)
+            {
+                Console.WriteLine($"Inmueble encontrado: ID={inmueble.Id}, Titulo={inmueble.Titulo}");
+            }
+            else
+            {
+                Console.WriteLine("No se encontró el inmueble");
             }
 
             return View(inmueble);

@@ -64,4 +64,9 @@ app.MapControllerRoute(
     pattern: "VisitasReservas/{action=Index}/{id?}",
     defaults: new { controller = "VisitasReservas" });
 
+app.MapControllerRoute(
+    name: "broker",
+    pattern: "Broker/{action=Index}/{id?}",
+    defaults: new { controller = "Broker" });
+
 app.Run();
