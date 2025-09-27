@@ -1,7 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using pc2.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
@@ -24,6 +28,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+app.MapControllerRoute(
+    name: "catalogo",
+    pattern: "Catalogo/{action=Index}/{id?}",
+    defaults: new { controller = "Catalogo" });
 
 
 app.Run();
