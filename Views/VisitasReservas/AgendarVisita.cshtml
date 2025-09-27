@@ -1,0 +1,23 @@
+@model dynamic
+@{
+    ViewData["Title"] = "Agendar Visita";
+    var inmueble = ViewBag.Inmueble;
+}
+<h2>Agendar visita para @inmueble.Titulo</h2>
+<form asp-action="AgendarVisita" method="post">
+    <input type="hidden" name="id" value="@inmueble.Id" />
+    <div>
+        <label>Fecha Inicio:</label>
+        <input type="datetime-local" name="FechaInicio" required />
+    </div>
+    <div>
+        <label>Fecha Fin:</label>
+        <input type="datetime-local" name="FechaFin" required />
+    </div>
+    <div>
+        <label>Notas:</label>
+        <textarea name="Notas"></textarea>
+    </div>
+    <div asp-validation-summary="All"></div>
+    <button type="submit">Agendar</button>
+</form>
