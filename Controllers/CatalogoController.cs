@@ -14,16 +14,14 @@ namespace pc2.Controllers
         {
             _context = context;
         }
+        
 
-        public async Task<IActionResult> Index(string ciudad, TipoInmueble? tipo, double? precioMin, double? precioMax, int? dormitorios, int page = 1)
+    public async Task<IActionResult> Index(string ciudad, TipoInmueble? tipo, double? precioMin, double? precioMax, int? dormitorios, int page = 1)
         {
-            // Guardar filtros en sesión
-            HttpContext.Session.SetString("FiltroCiudad", ciudad ?? "");
-            HttpContext.Session.SetString("FiltroTipo", tipo?.ToString() ?? "");
-            HttpContext.Session.SetString("FiltroPrecioMin", precioMin?.ToString() ?? "");
-            HttpContext.Session.SetString("FiltroPrecioMax", precioMax?.ToString() ?? "");
-            HttpContext.Session.SetString("FiltroDormitorios", dormitorios?.ToString() ?? "");
-        {
+            // Obtener todas las ciudades únicas para el filtro
+            var todasCiudades = await _context.Inmuebles.Where(i => i.Activo).Select(i => i.Ciudad).Distinct().OrderBy(c => c).ToListAsync();
+            ViewBag.Ciudades = todasCiudades;
+            // Filtros y paginación sin sesión ni caché
             var query = _context.Inmuebles.Where(i => i.Activo);
             if (!string.IsNullOrEmpty(ciudad))
                 query = query.Where(i => i.Ciudad == ciudad);
@@ -39,7 +37,7 @@ namespace pc2.Controllers
                 query = query.Where(i => i.Dormitorios >= dormitorios);
 
             int pageSize = 5;
-            var total = await query.CountAsync();
+            int total = await query.CountAsync();
             var inmuebles = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 
             ViewBag.TotalPages = (int)System.Math.Ceiling(total / (double)pageSize);
@@ -52,25 +50,16 @@ namespace pc2.Controllers
 
             return View(inmuebles);
         }
-        }
+
 
         public async Task<IActionResult> Detalle(int id)
-        {
-            HttpContext.Session.SetInt32("UltimoInmuebleId", id);
         {
             var inmueble = await _context.Inmuebles.FindAsync(id);
             if (inmueble == null || !inmueble.Activo)
                 return NotFound();
-            HttpContext.Session.SetString("UltimoInmuebleTitulo", inmueble.Titulo);
             return View(inmueble);
         }
 
-        [HttpPost]
-        public IActionResult AgendarVisita(int id)
-        {
-            // Aquí iría la lógica para agendar visita
-            TempData["Mensaje"] = "Visita agendada correctamente.";
-            return RedirectToAction("Detalle", new { id });
-        }
+        
     }
 }

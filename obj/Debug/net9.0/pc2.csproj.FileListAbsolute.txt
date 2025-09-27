@@ -218,3 +218,7 @@ C:\Users\ALONSO\Desktop\pc2\obj\Debug\net9.0\refint\pc2.dll
 C:\Users\ALONSO\Desktop\pc2\obj\Debug\net9.0\pc2.pdb
 C:\Users\ALONSO\Desktop\pc2\obj\Debug\net9.0\pc2.genruntimeconfig.cache
 C:\Users\ALONSO\Desktop\pc2\obj\Debug\net9.0\ref\pc2.dll
+C:\Users\ALONSO\Desktop\pc2\bin\Debug\net9.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+C:\Users\ALONSO\Desktop\pc2\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
+C:\Users\ALONSO\Desktop\pc2\bin\Debug\net9.0\StackExchange.Redis.dll
+C:\Users\ALONSO\Desktop\pc2\obj\Debug\net9.0\compressed\qvwh9poizv-6ja3n768s9.gz
