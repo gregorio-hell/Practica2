@@ -48,25 +48,22 @@
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="TipoInmueble" class="control-label"></label>
-                <select asp-for="TipoInmueble" class="form-control">
-                    <option value="Casa">Casa</option>
-                    <option value="Departamento">Departamento</option>
-                    <option value="Terreno">Terreno</option>
+                <label asp-for="Tipo" class="control-label"></label>
+                <select asp-for="Tipo" class="form-control" asp-items="@Html.GetEnumSelectList<TipoInmueble>()">
                 </select>
-                <span asp-validation-for="TipoInmueble" class="text-danger"></span>
+                <span asp-validation-for="Tipo" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="NumDormitorios" class="control-label"></label>
-                <input asp-for="NumDormitorios" class="form-control" />
-                <span asp-validation-for="NumDormitorios" class="text-danger"></span>
+                <label asp-for="Dormitorios" class="control-label"></label>
+                <input asp-for="Dormitorios" class="form-control" />
+                <span asp-validation-for="Dormitorios" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
                 <div class="form-check">
-                    <input asp-for="Estado" class="form-check-input" />
-                    <label asp-for="Estado" class="form-check-label"></label>
+                    <input asp-for="Activo" class="form-check-input" />
+                    <label asp-for="Activo" class="form-check-label"></label>
                 </div>
             </div>
 

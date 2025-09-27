@@ -29,13 +29,13 @@
             <td>@item.UsuarioId</td>
             <td>
                 @switch(item.Estado) {
-                    case "Pendiente":
+                    case EstadoVisita.Solicitada:
                         <span class="badge bg-warning">Pendiente</span>
                         break;
-                    case "Confirmada":
+                    case EstadoVisita.Confirmada:
                         <span class="badge bg-success">Confirmada</span>
                         break;
-                    case "Cancelada":
+                    case EstadoVisita.Cancelada:
                         <span class="badge bg-danger">Cancelada</span>
                         break;
                 }

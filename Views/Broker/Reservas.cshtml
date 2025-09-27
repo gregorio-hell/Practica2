@@ -24,7 +24,7 @@
         <tr>
             <td>@item.Inmueble.Titulo</td>
             <td>@item.UsuarioId</td>
-            <td>@item.FechaReserva.ToString("dd/MM/yyyy")</td>
+            <td>@item.FechaCreacion.ToString("dd/MM/yyyy")</td>
             <td>
                 <form asp-action="LiberarReserva" asp-route-id="@item.Id" method="post">
                     @Html.AntiForgeryToken()
