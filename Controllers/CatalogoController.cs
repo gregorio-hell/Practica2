@@ -158,7 +158,17 @@ namespace pc2.Controllers
         return RedirectToAction("Index");
     }
 
+    public async Task<IActionResult> Detalle(int id)
+    {
+        var inmueble = await _context.Inmuebles
+            .FirstOrDefaultAsync(m => m.Id == id && m.Activo);
+            
+        if (inmueble == null)
+        {
+            return NotFound();
+        }
 
-        
+        return View(inmueble);
+    }
     }
 }

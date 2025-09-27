@@ -25,6 +25,14 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Configuración de autenticación por cookies
+builder.Services.AddAuthentication("Cookies")
+    .AddCookie("Cookies", options => {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Shared/AccessDenied";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,7 +43,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseRouting();
+app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Configuración de manejo de acceso denegado
@@ -49,12 +60,9 @@ app.Use(async (context, next) =>
         await next();
     }
 });
-app.UseSession();
-app.MapStaticAssets();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Catalogo}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Catalogo}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "catalogo",
     pattern: "Catalogo/{action=Index}/{id?}",

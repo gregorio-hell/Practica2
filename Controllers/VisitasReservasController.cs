@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pc2.Data;
@@ -9,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace pc2.Controllers
 {
-    [Authorize]
     public class VisitasReservasController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -51,7 +49,7 @@ namespace pc2.Controllers
             var visita = new Visita
             {
                 InmuebleId = id,
-                UsuarioId = User.Identity.Name,
+                UsuarioId = HttpContext.Session.Id,
                 FechaInicio = FechaInicio,
                 FechaFin = FechaFin,
                 Estado = EstadoVisita.Solicitada,
@@ -78,7 +76,7 @@ namespace pc2.Controllers
             var reserva = new Reserva
             {
                 InmuebleId = id,
-                UsuarioId = User.Identity.Name,
+                UsuarioId = HttpContext.Session.Id,
                 FechaCreacion = DateTime.Now,
                 FechaExpiracion = DateTime.Now.AddHours(48)
             };
