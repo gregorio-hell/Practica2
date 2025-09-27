@@ -3,7 +3,7 @@ using pc2.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 // Configuración de Redis y sesión
-var redisConnection = builder.Configuration["RedisConnection"] ?? Environment.GetEnvironmentVariable("REDIS_CONNECTION") ?? "localhost:6379";
+var redisConnection = builder.Configuration.GetConnectionString("Redis") ?? Environment.GetEnvironmentVariable("REDIS_CONNECTION") ?? "localhost:6379";
 // Para configurar la cadena de conexión de Redis, usa la variable de entorno REDIS_CONNECTION o el valor en appsettings.json:
 // Ejemplo en Windows PowerShell:
 // $env:REDIS_CONNECTION = "localhost:6379"
