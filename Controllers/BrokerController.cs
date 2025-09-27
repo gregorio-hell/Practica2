@@ -180,6 +180,24 @@ namespace pc2.Controllers
             return RedirectToAction(nameof(Reservas));
         }
 
+        // GET: /Broker/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var inmueble = await _context.Inmuebles
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (inmueble == null)
+            {
+                return NotFound();
+            }
+
+            return View(inmueble);
+        }
+
         private bool InmuebleExists(int id)
         {
             return _context.Inmuebles.Any(e => e.Id == id);

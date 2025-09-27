@@ -37,6 +37,18 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
+
+// Configuración de manejo de acceso denegado
+app.UseStatusCodePages();
+app.Use(async (context, next) =>
+{
+    await next();
+    if (context.Response.StatusCode == 403)
+    {
+        context.Request.Path = "/Shared/AccessDenied";
+        await next();
+    }
+});
 app.UseSession();
 app.MapStaticAssets();
 app.MapControllerRoute(
