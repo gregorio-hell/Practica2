@@ -1,0 +1,61 @@
+@model IEnumerable<pc2.Models.Visita>
+
+@{
+    ViewData["Title"] = "Agenda del Día";
+}
+
+<h1>Agenda del Día</h1>
+
+<p>
+    <a asp-action="Index" class="btn btn-secondary">Volver al Panel</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Inmueble</th>
+            <th>Hora</th>
+            <th>Usuario</th>
+            <th>Estado</th>
+            <th>Notas</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>@item.Inmueble.Titulo</td>
+            <td>@item.FechaVisita.ToString("HH:mm")</td>
+            <td>@item.UsuarioId</td>
+            <td>
+                @switch(item.Estado) {
+                    case "Pendiente":
+                        <span class="badge bg-warning">Pendiente</span>
+                        break;
+                    case "Confirmada":
+                        <span class="badge bg-success">Confirmada</span>
+                        break;
+                    case "Cancelada":
+                        <span class="badge bg-danger">Cancelada</span>
+                        break;
+                }
+            </td>
+            <td>@item.Notas</td>
+            <td>
+                @if (item.Estado == "Pendiente") {
+                    <div class="btn-group" role="group">
+                        <form asp-action="ConfirmarVisita" asp-route-id="@item.Id" method="post" style="display: inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-success">Confirmar</button>
+                        </form>
+                        <form asp-action="CancelarVisita" asp-route-id="@item.Id" method="post" style="display: inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-danger">Cancelar</button>
+                        </form>
+                    </div>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

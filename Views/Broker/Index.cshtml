@@ -1,0 +1,57 @@
+@model IEnumerable<pc2.Models.Inmueble>
+
+@{
+    ViewData["Title"] = "Panel de Broker";
+}
+
+<h1>Panel de Broker</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Crear Nuevo Inmueble</a>
+    <a asp-action="Agenda" class="btn btn-info">Ver Agenda del Día</a>
+    <a asp-action="Reservas" class="btn btn-warning">Ver Reservas Activas</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Codigo)</th>
+            <th>@Html.DisplayNameFor(model => model.Titulo)</th>
+            <th>@Html.DisplayNameFor(model => model.Precio)</th>
+            <th>@Html.DisplayNameFor(model => model.Ciudad)</th>
+            <th>@Html.DisplayNameFor(model => model.Estado)</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Codigo)</td>
+            <td>@Html.DisplayFor(modelItem => item.Titulo)</td>
+            <td>@Html.DisplayFor(modelItem => item.Precio)</td>
+            <td>@Html.DisplayFor(modelItem => item.Ciudad)</td>
+            <td>
+                @if(item.Estado)
+                {
+                    <span class="badge bg-success">Activo</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Inactivo</span>
+                }
+            </td>
+            <td>
+                <div class="btn-group" role="group">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Editar</a>
+                    <form asp-action="ToggleStatus" asp-route-id="@item.Id" method="post" style="display: inline;">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm @(item.Estado ? "btn-danger" : "btn-success")">
+                            @(item.Estado ? "Desactivar" : "Activar")
+                        </button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -1,0 +1,37 @@
+@model IEnumerable<pc2.Models.Reserva>
+
+@{
+    ViewData["Title"] = "Reservas Activas";
+}
+
+<h1>Reservas Activas</h1>
+
+<p>
+    <a asp-action="Index" class="btn btn-secondary">Volver al Panel</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Inmueble</th>
+            <th>Usuario</th>
+            <th>Fecha de Reserva</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>@item.Inmueble.Titulo</td>
+            <td>@item.UsuarioId</td>
+            <td>@item.FechaReserva.ToString("dd/MM/yyyy")</td>
+            <td>
+                <form asp-action="LiberarReserva" asp-route-id="@item.Id" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-sm btn-danger">Liberar Reserva</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
