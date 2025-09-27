@@ -1,15 +1,26 @@
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379";
+});
+builder.Services.AddSession();
 app.MapControllerRoute(
     name: "visitasreservas",
     pattern: "VisitasReservas/{action=Index}/{id?}",
     defaults: new { controller = "VisitasReservas" });
 using Microsoft.EntityFrameworkCore;
 using pc2.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379";
+});
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -25,6 +36,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseSession();
 
 app.MapStaticAssets();
 
@@ -36,6 +48,9 @@ app.MapControllerRoute(
     name: "catalogo",
     pattern: "Catalogo/{action=Index}/{id?}",
     defaults: new { controller = "Catalogo" });
-
+app.MapControllerRoute(
+    name: "visitasreservas",
+    pattern: "VisitasReservas/{action=Index}/{id?}",
+    defaults: new { controller = "VisitasReservas" });
 
 app.Run();

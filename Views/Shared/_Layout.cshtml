@@ -32,6 +32,15 @@
         </nav>
     </header>
     <div class="container">
+        @{
+            var ultimoId = Context.Session.GetInt32("UltimoInmuebleId");
+            var ultimoTitulo = Context.Session.GetString("UltimoInmuebleTitulo");
+        }
+        @if (ultimoId != null && !string.IsNullOrEmpty(ultimoTitulo)) {
+            <div class="alert alert-info mb-2">
+                <a asp-controller="Catalogo" asp-action="Detalle" asp-route-id="@ultimoId">Volver a @ultimoTitulo</a>
+            </div>
+        }
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

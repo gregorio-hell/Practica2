@@ -17,6 +17,13 @@ namespace pc2.Controllers
 
         public async Task<IActionResult> Index(string ciudad, TipoInmueble? tipo, double? precioMin, double? precioMax, int? dormitorios, int page = 1)
         {
+            // Guardar filtros en sesión
+            HttpContext.Session.SetString("FiltroCiudad", ciudad ?? "");
+            HttpContext.Session.SetString("FiltroTipo", tipo?.ToString() ?? "");
+            HttpContext.Session.SetString("FiltroPrecioMin", precioMin?.ToString() ?? "");
+            HttpContext.Session.SetString("FiltroPrecioMax", precioMax?.ToString() ?? "");
+            HttpContext.Session.SetString("FiltroDormitorios", dormitorios?.ToString() ?? "");
+        {
             var query = _context.Inmuebles.Where(i => i.Activo);
             if (!string.IsNullOrEmpty(ciudad))
                 query = query.Where(i => i.Ciudad == ciudad);
@@ -45,12 +52,16 @@ namespace pc2.Controllers
 
             return View(inmuebles);
         }
+        }
 
         public async Task<IActionResult> Detalle(int id)
+        {
+            HttpContext.Session.SetInt32("UltimoInmuebleId", id);
         {
             var inmueble = await _context.Inmuebles.FindAsync(id);
             if (inmueble == null || !inmueble.Activo)
                 return NotFound();
+            HttpContext.Session.SetString("UltimoInmuebleTitulo", inmueble.Titulo);
             return View(inmueble);
         }
 
