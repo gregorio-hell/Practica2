@@ -1,3 +1,7 @@
+app.MapControllerRoute(
+    name: "visitasreservas",
+    pattern: "VisitasReservas/{action=Index}/{id?}",
+    defaults: new { controller = "VisitasReservas" });
 using Microsoft.EntityFrameworkCore;
 using pc2.Data;
 var builder = WebApplication.CreateBuilder(args);

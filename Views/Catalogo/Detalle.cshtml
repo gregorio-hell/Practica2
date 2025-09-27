@@ -12,11 +12,22 @@
     <p><strong>Baños:</strong> @Model.Banos</p>
     <p><strong>Metros Cuadrados:</strong> @Model.MetrosCuadrados</p>
     <p><strong>Precio:</strong> @Model.Precio</p>
-    <form asp-action="AgendarVisita" method="post">
+    <form asp-controller="VisitasReservas" asp-action="AgendarVisita" method="get">
         <input type="hidden" name="id" value="@Model.Id" />
         <button type="submit">Agendar visita</button>
     </form>
     @if (TempData["Mensaje"] != null) {
         <div class="alert alert-success">@TempData["Mensaje"]</div>
     }
+    @if (TempData["Error"] != null) {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+    @{
+        var reservaActiva = false;
+        // Aquí deberías consultar si hay reserva activa, pero en Razor puro no se puede, lo ideal es hacerlo en el modelo o ViewBag
+    }
+    <form asp-controller="VisitasReservas" asp-action="Reservar" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit">Reservar ahora</button>
+    </form>
 </div>
