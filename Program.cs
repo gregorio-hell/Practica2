@@ -3,13 +3,15 @@ using pc2.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 // Configuración de Redis y sesión
-var redisConnection = builder.Configuration.GetConnectionString("Redis") ?? Environment.GetEnvironmentVariable("REDIS_CONNECTION") ?? "localhost:6379";
-// Para configurar la cadena de conexión de Redis, usa la variable de entorno REDIS_CONNECTION o el valor en appsettings.json:
-// Ejemplo en Windows PowerShell:
-// $env:REDIS_CONNECTION = "localhost:6379"
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = redisConnection;
+    options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions
+    {
+        EndPoints = { "localhost:6379" },
+        ConnectTimeout = 5000,
+        SyncTimeout = 5000,
+        AbortOnConnectFail = false
+    };
 });
 builder.Services.AddSession(options =>
 {
