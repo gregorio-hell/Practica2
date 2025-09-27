@@ -1,59 +1,88 @@
+<link rel="stylesheet" href="~/css/catalogo.css" />
 @model IEnumerable<pc2.Models.Inmueble>
 @{
     ViewData["Title"] = "Catálogo";
 }
-<h2>Catálogo de Inmuebles</h2>
-<form method="get">
-    <div>
-        <label>Ciudad:</label>
-        <input type="text" name="ciudad" value="@ViewBag.Ciudad" />
-        <label>Tipo:</label>
-        <select name="tipo">
+<h2 style="font-size:2rem;font-weight:700;margin-bottom:1.5rem;"><span style="color:#7c3aed;">Venta de apartamentos</span></h2>
+<form method="get" class="catalogo-filtros" style="margin-bottom:2rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;">
+    <style>
+        .filtro-group { display:flex; align-items:center; gap:0.5rem; background:#f3f3f3; border-radius:2rem; padding:0.5rem 1rem; margin-right:1rem; }
+        .filtro-group label { margin-bottom:0; font-weight:500; color:#7c3aed; }
+        .filtro-group .fa { margin-right:0.3rem; color:#7c3aed; }
+        .catalogo-filtros .btn { margin-left:1rem; }
+    </style>
+    <div class="filtro-group">
+        <label><i class="fa fa-map-marker"></i>Ciudad:</label>
+        <select name="ciudad" class="form-select" style="width:140px;">
+            <option value="">Todas</option>
+            @foreach (var ciudad in Model.Select(i => i.Ciudad).Distinct().OrderBy(c => c)) {
+                var selected = ViewBag.Ciudad?.ToString() == ciudad ? "selected" : "";
+                <option value="@ciudad" selected="@selected">@ciudad</option>
+            }
+        </select>
+    </div>
+    <div class="filtro-group">
+        <label><i class="fa fa-home"></i>Tipo:</label>
+        <select name="tipo" class="form-select" style="width:120px;">
             <option value="">Todos</option>
             @foreach (var tipo in Enum.GetValues(typeof(pc2.Models.TipoInmueble))) {
                 var selected = ViewBag.Tipo?.ToString() == tipo.ToString() ? "selected" : "";
                 <option value="@tipo" selected="@selected">@tipo</option>
             }
         </select>
-        <label>Precio Min:</label>
-        <input type="number" name="precioMin" min="0" value="@ViewBag.PrecioMin" />
-        <label>Precio Max:</label>
-        <input type="number" name="precioMax" min="0" value="@ViewBag.PrecioMax" />
-        <label>Dormitorios >=</label>
-        <input type="number" name="dormitorios" min="0" value="@ViewBag.Dormitorios" />
-        <button type="submit">Filtrar</button>
     </div>
+    <div class="filtro-group">
+        <label><i class="fa fa-dollar"></i>Precio Min:</label>
+        <input type="number" name="precioMin" min="0" value="@ViewBag.PrecioMin" class="form-control" style="width:100px;" />
+    </div>
+    <div class="filtro-group">
+        <label><i class="fa fa-dollar"></i>Precio Max:</label>
+        <input type="number" name="precioMax" min="0" value="@ViewBag.PrecioMax" class="form-control" style="width:100px;" />
+    </div>
+    <div class="filtro-group">
+        <label><i class="fa fa-bed"></i>Dormitorios >=</label>
+        <input type="number" name="dormitorios" min="0" value="@ViewBag.Dormitorios" class="form-control" style="width:80px;" />
+    </div>
+    <button type="submit" class="btn btn-primary" style="background:#7c3aed;border:none;">Filtros</button>
     <div asp-validation-summary="All"></div>
 </form>
 @if (!Model.Any()) {
     <p>No hay inmuebles que coincidan con los filtros.</p>
 } else {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Ciudad</th>
-                <th>Tipo</th>
-                <th>Precio</th>
-                <th>Dormitorios</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+    <style>
+        .catalogo-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:2rem; }
+        .catalogo-card { background:#fff; border-radius:1rem; box-shadow:0 2px 12px rgba(124,62,237,0.08); padding:1rem; display:flex; flex-direction:column; position:relative; transition:box-shadow .2s; }
+        .catalogo-card:hover { box-shadow:0 4px 24px rgba(124,62,237,0.18); }
+        .catalogo-img { width:100%; height:180px; overflow:hidden; border-radius:0.75rem; margin-bottom:1rem; background:#f3f3f3; display:flex; align-items:center; justify-content:center; }
+        .catalogo-img img { width:100%; height:100%; object-fit:cover; }
+        .catalogo-badge { position:absolute; top:1rem; left:1rem; background:#7c3aed; color:#fff; font-size:0.85rem; font-weight:700; border-radius:1rem; padding:0.25rem 0.8rem; box-shadow:0 1px 4px rgba(124,62,237,0.12); }
+        .catalogo-discount { position:absolute; top:1rem; right:1rem; background:#21d49b; color:#fff; font-size:0.85rem; font-weight:700; border-radius:1rem; padding:0.25rem 0.8rem; box-shadow:0 1px 4px rgba(33,212,155,0.12); }
+        .catalogo-info-btn { background:#f3f3f3; color:#7c3aed; border:none; border-radius:2rem; padding:0.4rem 1.2rem; font-weight:600; margin-right:0.5rem; transition:background .2s; }
+        .catalogo-info-btn:hover { background:#e0e7ff; color:#4c1d95; }
+        .catalogo-card .fa { margin-right:0.3rem; }
+    </style>
+    <div class="catalogo-grid">
         @foreach (var i in Model) {
-            <tr>
-                <td>@i.Titulo</td>
-                <td>@i.Ciudad</td>
-                <td>@i.Tipo</td>
-                <td>@i.Precio</td>
-                <td>@i.Dormitorios</td>
-                <td><a asp-action="Detalle" asp-route-id="@i.Id">Ver detalle</a></td>
-            </tr>
+            <div class="catalogo-card">
+                <div class="catalogo-img">
+                    <img src="@i.Imagen" alt="@i.Titulo" />
+                </div>
+                <span class="catalogo-badge"><i class="fa fa-map-marker"></i> @i.Ciudad</span>
+                <span class="catalogo-discount">@((i.Precio < 300000000) ? "21%" : "12%")</span>
+                <div style="font-size:1.1rem;font-weight:700;color:#222;margin-bottom:0.5rem;">$ @String.Format("{0:N0}", i.Precio)</div>
+                <div style="font-size:0.95rem;color:#888;margin-bottom:0.5rem;">@i.Titulo</div>
+                <div style="font-size:0.9rem;color:#555;margin-bottom:0.5rem;">
+                    <i class="fa fa-expand"></i> @i.MetrosCuadrados m² &nbsp; <i class="fa fa-bed"></i> @i.Dormitorios Hab. &nbsp; <i class="fa fa-bath"></i> @i.Banos Baños &nbsp; <i class="fa fa-home"></i> @i.Tipo
+                </div>
+                <div style="margin-top:auto;display:flex;justify-content:flex-end;gap:0.5rem;">
+                    <button class="catalogo-info-btn"><i class="fa fa-info-circle"></i> Recibir Información</button>
+                    <a asp-action="Detalle" asp-route-id="@i.Id" class="btn btn-outline-primary" style="border-radius:2rem;padding:0.4rem 1.2rem;font-weight:600;border-color:#7c3aed;color:#7c3aed;">Ver detalle</a>
+                </div>
+            </div>
         }
-        </tbody>
-    </table>
-    <nav>
-        <ul class="pagination">
+    </div>
+    <nav style="margin-top:2rem;">
+        <ul class="pagination justify-content-center">
             @for (int p = 1; p <= ViewBag.TotalPages; p++) {
                 <li class="page-item @(ViewBag.Page == p ? "active" : "")">
                     <a class="page-link" href="?page=@p&ciudad=@ViewBag.Ciudad&tipo=@ViewBag.Tipo&precioMin=@ViewBag.PrecioMin&precioMax=@ViewBag.PrecioMax&dormitorios=@ViewBag.Dormitorios">@p</a>

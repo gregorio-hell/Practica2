@@ -1,33 +1,33 @@
+<link rel="stylesheet" href="~/css/catalogo.css" />
 @model pc2.Models.Inmueble
 @{
     ViewData["Title"] = "Detalle de Inmueble";
 }
-<h2>@Model.Titulo</h2>
-<div>
-    <img src="~/images/@Model.Imagen" alt="@Model.Titulo" style="max-width:300px;" />
-    <p><strong>Ciudad:</strong> @Model.Ciudad</p>
-    <p><strong>Tipo:</strong> @Model.Tipo</p>
-    <p><strong>Dirección:</strong> @Model.Direccion</p>
-    <p><strong>Dormitorios:</strong> @Model.Dormitorios</p>
-    <p><strong>Baños:</strong> @Model.Banos</p>
-    <p><strong>Metros Cuadrados:</strong> @Model.MetrosCuadrados</p>
-    <p><strong>Precio:</strong> @Model.Precio</p>
-    <form asp-controller="VisitasReservas" asp-action="AgendarVisita" method="get">
-        <input type="hidden" name="id" value="@Model.Id" />
-        <button type="submit">Agendar visita</button>
-    </form>
-    @if (TempData["Mensaje"] != null) {
-        <div class="alert alert-success">@TempData["Mensaje"]</div>
-    }
-    @if (TempData["Error"] != null) {
-        <div class="alert alert-danger">@TempData["Error"]</div>
-    }
-    @{
-        var reservaActiva = false;
-        // Aquí deberías consultar si hay reserva activa, pero en Razor puro no se puede, lo ideal es hacerlo en el modelo o ViewBag
-    }
-    <form asp-controller="VisitasReservas" asp-action="Reservar" method="post">
-        <input type="hidden" name="id" value="@Model.Id" />
-        <button type="submit">Reservar ahora</button>
-    </form>
+<div class="catalogo-card" style="max-width:500px;margin:auto;">
+    <div class="catalogo-img" style="height:260px;">
+        <img src="~/images/@Model.Imagen" alt="@Model.Titulo" />
+    </div>
+    <span class="catalogo-badge"><i class="fa fa-map-marker"></i> @Model.Ciudad</span>
+    <div style="font-size:1.3rem;font-weight:700;color:#222;margin-bottom:0.5rem;">@Model.Titulo</div>
+    <div style="font-size:1.1rem;color:#7c3aed;margin-bottom:0.5rem;">$ @String.Format("{0:N0}", Model.Precio)</div>
+    <div style="font-size:1rem;color:#555;margin-bottom:0.5rem;">
+        <i class="fa fa-home"></i> @Model.Tipo &nbsp; <i class="fa fa-expand"></i> @Model.MetrosCuadrados m² &nbsp; <i class="fa fa-bed"></i> @Model.Dormitorios &nbsp; <i class="fa fa-bath"></i> @Model.Banos
+    </div>
+    <div style="font-size:0.98rem;color:#888;margin-bottom:0.5rem;"><i class="fa fa-map-pin"></i> @Model.Direccion</div>
+    <div style="margin-top:1rem;display:flex;flex-direction:column;gap:0.5rem;">
+        <form asp-controller="VisitasReservas" asp-action="AgendarVisita" method="get" style="display:inline;">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button type="submit" class="btn btn-primary catalogo-info-btn" style="width:100%;background:#7c3aed;color:#fff;">Agendar visita</button>
+        </form>
+        <form asp-controller="VisitasReservas" asp-action="Reservar" method="post" style="display:inline;">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button type="submit" class="btn btn-outline-primary" style="width:100%;border-radius:2rem;font-weight:600;border-color:#7c3aed;color:#7c3aed;">Reservar ahora</button>
+        </form>
+        @if (TempData["Mensaje"] != null) {
+            <div class="alert alert-success">@TempData["Mensaje"]</div>
+        }
+        @if (TempData["Error"] != null) {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
+    </div>
 </div>
