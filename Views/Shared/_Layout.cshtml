@@ -27,13 +27,25 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if (User.IsInRole("Broker"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Broker" asp-action="Index">Panel Broker</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
     <div class="container">
-        <!-- Atajo a último inmueble visitado eliminado por falta de sesión -->
+        @if (Context.Session.GetInt32("UltimoInmuebleId") != null && !string.IsNullOrEmpty(Context.Session.GetString("UltimoInmuebleTitulo"))) {
+            <div class="alert alert-info" style="margin-bottom:1rem;">
+                <a href="/Catalogo/Detalle/@Context.Session.GetInt32("UltimoInmuebleId")" class="btn btn-sm btn-primary" style="background:#7c3aed;border:none;">
+                    Volver a @Context.Session.GetString("UltimoInmuebleTitulo")
+                </a>
+            </div>
+        }
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
