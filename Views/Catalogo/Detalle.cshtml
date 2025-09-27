@@ -1,0 +1,22 @@
+@model pc2.Models.Inmueble
+@{
+    ViewData["Title"] = "Detalle de Inmueble";
+}
+<h2>@Model.Titulo</h2>
+<div>
+    <img src="~/images/@Model.Imagen" alt="@Model.Titulo" style="max-width:300px;" />
+    <p><strong>Ciudad:</strong> @Model.Ciudad</p>
+    <p><strong>Tipo:</strong> @Model.Tipo</p>
+    <p><strong>Dirección:</strong> @Model.Direccion</p>
+    <p><strong>Dormitorios:</strong> @Model.Dormitorios</p>
+    <p><strong>Baños:</strong> @Model.Banos</p>
+    <p><strong>Metros Cuadrados:</strong> @Model.MetrosCuadrados</p>
+    <p><strong>Precio:</strong> @Model.Precio</p>
+    <form asp-action="AgendarVisita" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit">Agendar visita</button>
+    </form>
+    @if (TempData["Mensaje"] != null) {
+        <div class="alert alert-success">@TempData["Mensaje"]</div>
+    }
+</div>

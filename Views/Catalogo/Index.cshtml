@@ -1,0 +1,64 @@
+@model IEnumerable<pc2.Models.Inmueble>
+@{
+    ViewData["Title"] = "Catálogo";
+}
+<h2>Catálogo de Inmuebles</h2>
+<form method="get">
+    <div>
+        <label>Ciudad:</label>
+        <input type="text" name="ciudad" value="@ViewBag.Ciudad" />
+        <label>Tipo:</label>
+        <select name="tipo">
+            <option value="">Todos</option>
+            @foreach (var tipo in Enum.GetValues(typeof(pc2.Models.TipoInmueble))) {
+                var selected = ViewBag.Tipo?.ToString() == tipo.ToString() ? "selected" : "";
+                <option value="@tipo" selected="@selected">@tipo</option>
+            }
+        </select>
+        <label>Precio Min:</label>
+        <input type="number" name="precioMin" min="0" value="@ViewBag.PrecioMin" />
+        <label>Precio Max:</label>
+        <input type="number" name="precioMax" min="0" value="@ViewBag.PrecioMax" />
+        <label>Dormitorios >=</label>
+        <input type="number" name="dormitorios" min="0" value="@ViewBag.Dormitorios" />
+        <button type="submit">Filtrar</button>
+    </div>
+    <div asp-validation-summary="All"></div>
+</form>
+@if (!Model.Any()) {
+    <p>No hay inmuebles que coincidan con los filtros.</p>
+} else {
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Ciudad</th>
+                <th>Tipo</th>
+                <th>Precio</th>
+                <th>Dormitorios</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var i in Model) {
+            <tr>
+                <td>@i.Titulo</td>
+                <td>@i.Ciudad</td>
+                <td>@i.Tipo</td>
+                <td>@i.Precio</td>
+                <td>@i.Dormitorios</td>
+                <td><a asp-action="Detalle" asp-route-id="@i.Id">Ver detalle</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <nav>
+        <ul class="pagination">
+            @for (int p = 1; p <= ViewBag.TotalPages; p++) {
+                <li class="page-item @(ViewBag.Page == p ? "active" : "")">
+                    <a class="page-link" href="?page=@p&ciudad=@ViewBag.Ciudad&tipo=@ViewBag.Tipo&precioMin=@ViewBag.PrecioMin&precioMax=@ViewBag.PrecioMax&dormitorios=@ViewBag.Dormitorios">@p</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
