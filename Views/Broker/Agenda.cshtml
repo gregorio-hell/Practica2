@@ -25,7 +25,7 @@
     @foreach (var item in Model) {
         <tr>
             <td>@item.Inmueble.Titulo</td>
-            <td>@item.FechaVisita.ToString("HH:mm")</td>
+            <td>@item.FechaInicio.ToString("HH:mm")</td>
             <td>@item.UsuarioId</td>
             <td>
                 @switch(item.Estado) {

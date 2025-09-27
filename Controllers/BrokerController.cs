@@ -33,12 +33,13 @@ namespace pc2.Controllers
         // POST: /Broker/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Codigo,Titulo,Imagen,Precio,Ciudad,Direccion,TipoInmueble,NumDormitorios,Estado")] Inmueble inmueble)
+        public async Task<IActionResult> Create([Bind("Codigo,Titulo,Imagen,Precio,Ciudad,Direccion,Tipo,Dormitorios,Activo")] Inmueble inmueble)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(inmueble);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Inmueble creado exitosamente";
                 return RedirectToAction(nameof(Index));
             }
             return View(inmueble);
@@ -63,7 +64,7 @@ namespace pc2.Controllers
         // POST: /Broker/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Codigo,Titulo,Imagen,Precio,Ciudad,Direccion,TipoInmueble,NumDormitorios,Estado")] Inmueble inmueble)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Codigo,Titulo,Imagen,Precio,Ciudad,Direccion,Tipo,Dormitorios,Activo")] Inmueble inmueble)
         {
             if (id != inmueble.Id)
             {
@@ -104,7 +105,7 @@ namespace pc2.Controllers
                 return NotFound();
             }
 
-            inmueble.Estado = !inmueble.Estado;
+            inmueble.Activo = !inmueble.Activo;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -115,8 +116,8 @@ namespace pc2.Controllers
             var hoy = DateTime.Today;
             var visitas = await _context.Visitas
                 .Include(v => v.Inmueble)
-                .Where(v => v.FechaVisita.Date == hoy)
-                .OrderBy(v => v.FechaVisita)
+                .Where(v => v.FechaInicio.Date == hoy)
+                .OrderBy(v => v.FechaInicio)
                 .ToListAsync();
             return View(visitas);
         }
@@ -132,7 +133,7 @@ namespace pc2.Controllers
                 return NotFound();
             }
 
-            visita.Estado = "Confirmada";
+            visita.Estado = EstadoVisita.Confirmada;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Agenda));
         }
@@ -148,7 +149,7 @@ namespace pc2.Controllers
                 return NotFound();
             }
 
-            visita.Estado = "Cancelada";
+            visita.Estado = EstadoVisita.Cancelada;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Agenda));
         }
@@ -158,7 +159,7 @@ namespace pc2.Controllers
         {
             var reservas = await _context.Reservas
                 .Include(r => r.Inmueble)
-                .Where(r => r.Estado == true)
+                .Where(r => r.FechaExpiracion > DateTime.Now)
                 .ToListAsync();
             return View(reservas);
         }
@@ -174,7 +175,7 @@ namespace pc2.Controllers
                 return NotFound();
             }
 
-            reserva.Estado = false;
+            reserva.FechaExpiracion = DateTime.Now;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Reservas));
         }
